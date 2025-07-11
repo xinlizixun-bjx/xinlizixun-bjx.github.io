@@ -1,0 +1,367 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心灵守护 - 智能心理咨询助手</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4A6FA5',
+                        secondary: '#98C1D9',
+                        accent: '#EE6C4D',
+                        neutral: '#E0FBFC',
+                        dark: '#293241',
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .chat-bubble-user {
+                @apply bg-primary text-white rounded-lg rounded-tr-none p-4 shadow-md max-w-[80%] animate-fade-in;
+            }
+            .chat-bubble-ai {
+                @apply bg-white text-dark rounded-lg rounded-tl-none p-4 shadow-md max-w-[80%] animate-fade-in;
+            }
+            .animate-fade-in {
+                animation: fadeIn 0.3s ease-in-out;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .bg-gradient {
+                background: linear-gradient(135deg, #4A6FA5 0%, #98C1D9 100%);
+            }
+        }
+    </style>
+</head>
+<body class="font-inter bg-neutral min-h-screen flex flex-col">
+    <!-- 顶部导航栏 -->
+    <header class="bg-gradient text-white shadow-lg">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fa fa-heart-o text-2xl text-accent"></i>
+                <h1 class="text-xl md:text-2xl font-bold">心灵守护</h1>
+            </div>
+            <nav class="hidden md:flex space-x-6">
+                <a href="#" class="hover:text-accent transition-colors duration-300">首页</a>
+                <a href="#" class="hover:text-accent transition-colors duration-300">服务介绍</a>
+                <a href="#" class="hover:text-accent transition-colors duration-300">关于我们</a>
+                <a href="#" class="hover:text-accent transition-colors duration-300">联系咨询</a>
+            </nav>
+            <button class="md:hidden text-2xl" id="menuToggle">
+                <i class="fa fa-bars"></i>
+            </button>
+        </div>
+        <!-- 移动端菜单 -->
+        <div class="md:hidden hidden bg-dark/95 backdrop-blur-md" id="mobileMenu">
+            <div class="container mx-auto px-4 py-3 flex flex-col space-y-3">
+                <a href="#" class="py-2 hover:text-accent transition-colors duration-300">首页</a>
+                <a href="#" class="py-2 hover:text-accent transition-colors duration-300">服务介绍</a>
+                <a href="#" class="py-2 hover:text-accent transition-colors duration-300">关于我们</a>
+                <a href="#" class="py-2 hover:text-accent transition-colors duration-300">联系咨询</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要内容区 -->
+    <main class="flex-grow container mx-auto px-4 py-6 flex flex-col md:flex-row gap-6">
+        <!-- 左侧信息栏 -->
+        <aside class="md:w-1/4 hidden md:block">
+            <div class="bg-white rounded-xl shadow-lg p-5 mb-6">
+                <div class="text-center mb-4">
+                    <div class="w-24 h-24 mx-auto bg-secondary rounded-full flex items-center justify-center mb-3">
+                        <i class="fa fa-user-md text-4xl text-primary"></i>
+                    </div>
+                    <h2 class="text-lg font-bold text-dark">心灵守护AI</h2>
+                    <p class="text-sm text-gray-600">专业心理咨询助手</p>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex items-center p-2 rounded-lg hover:bg-neutral transition-colors duration-300">
+                        <i class="fa fa-info-circle text-primary w-6"></i>
+                        <span>关于服务</span>
+                    </div>
+                    <div class="flex items-center p-2 rounded-lg hover:bg-neutral transition-colors duration-300">
+                        <i class="fa fa-shield text-primary w-6"></i>
+                        <span>隐私保护</span>
+                    </div>
+                    <div class="flex items-center p-2 rounded-lg hover:bg-neutral transition-colors duration-300">
+                        <i class="fa fa-question-circle text-primary w-6"></i>
+                        <span>常见问题</span>
+                    </div>
+                    <div class="flex items-center p-2 rounded-lg hover:bg-neutral transition-colors duration-300">
+                        <i class="fa fa-comments text-primary w-6"></i>
+                        <span>人工咨询</span>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-5">
+                <h3 class="text-lg font-bold text-dark mb-3">心理健康小贴士</h3>
+                <div class="space-y-3">
+                    <div class="p-2 border-l-4 border-accent bg-neutral/50 rounded-r-lg">
+                        <p class="text-sm">每天花10分钟进行深呼吸练习，有助于缓解焦虑。</p>
+                    </div>
+                    <div class="p-2 border-l-4 border-primary bg-neutral/50 rounded-r-lg">
+                        <p class="text-sm">保持规律的作息时间，充足的睡眠对心理健康至关重要。</p>
+                    </div>
+                    <div class="p-2 border-l-4 border-secondary bg-neutral/50 rounded-r-lg">
+                        <p class="text-sm">适当的运动可以促进大脑分泌内啡肽，改善情绪。</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 聊天区域 -->
+        <section class="md:w-2/3 bg-white rounded-xl shadow-lg overflow-hidden flex flex-col h-[70vh] min-h-[600px]">
+            <div class="bg-primary text-white p-4 border-b">
+                <h2 class="text-xl font-bold flex items-center">
+                    <i class="fa fa-comments-o mr-2"></i>在线咨询
+                </h2>
+            </div>
+            <div class="flex-grow overflow-y-auto p-4 space-y-4" id="chatContainer">
+                <!-- 欢迎消息 -->
+                <div class="flex items-start mb-4">
+                    <div class="w-10 h-10 rounded-full bg-secondary flex items-center justify-center mr-3 flex-shrink-0">
+                        <i class="fa fa-robot text-primary"></i>
+                    </div>
+                    <div class="chat-bubble-ai">
+                        <p class="text-dark">你好！我是心灵守护AI，一个专注于心理健康的智能助手。</p>
+                        <p class="text-dark mt-2">我可以帮助你分析心理问题，提供应对策略，以及引导你进行自我调节。请告诉我你的困扰，我们可以一起找到解决办法。</p>
+                        <div class="mt-3 text-xs text-gray-500">下午 14:30</div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 border-t">
+                <form id="messageForm" class="flex">
+                    <input type="text" id="userInput" placeholder="请描述你的感受或问题..." 
+                           class="flex-grow rounded-l-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                    <button type="submit" class="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-r-lg transition-colors duration-300 flex items-center">
+                        <i class="fa fa-paper-plane mr-2"></i>发送
+                    </button>
+                </form>
+                <div class="flex justify-between mt-2 text-xs text-gray-500">
+                    <span>我会严格保密你的隐私</span>
+                    <span id="typingIndicator" class="hidden">
+                        <i class="fa fa-circle-o-notch fa-spin"></i> AI正在思考...
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 右侧信息栏 -->
+        <aside class="md:w-1/4 hidden lg:block">
+            <div class="bg-white rounded-xl shadow-lg p-5 mb-6">
+                <h3 class="text-lg font-bold text-dark mb-3">情绪追踪</h3>
+                <div class="space-y-3">
+                    <div class="bg-neutral/50 p-3 rounded-lg">
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm font-medium">今日情绪</span>
+                            <span class="text-sm text-accent">中等压力</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-accent h-2.5 rounded-full" style="width: 65%"></div>
+                        </div>
+                    </div>
+                    <div class="bg-neutral/50 p-3 rounded-lg">
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm font-medium">本周情绪趋势</span>
+                            <span class="text-sm text-primary">有所改善</span>
+                        </div>
+                        <div class="h-32">
+                            <!-- 图表将在这里生成 -->
+                            <svg viewBox="0 0 100 30" class="w-full h-full">
+                                <path d="M0,20 L20,25 L40,15 L60,20 L80,10 L100,5" fill="none" stroke="#4A6FA5" stroke-width="2" class="animate-pulse"></path>
+                                <circle cx="0" cy="20" r="2" fill="#4A6FA5"></circle>
+                                <circle cx="20" cy="25" r="2" fill="#4A6FA5"></circle>
+                                <circle cx="40" cy="15" r="2" fill="#4A6FA5"></circle>
+                                <circle cx="60" cy="20" r="2" fill="#4A6FA5"></circle>
+                                <circle cx="80" cy="10" r="2" fill="#4A6FA5"></circle>
+                                <circle cx="100" cy="5" r="2" fill="#4A6FA5"></circle>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-5">
+                <h3 class="text-lg font-bold text-dark mb-3">推荐资源</h3>
+                <div class="space-y-3">
+                    <a href="#" class="block p-3 border border-secondary rounded-lg hover:bg-neutral/50 transition-colors duration-300">
+                        <h4 class="font-medium text-primary">焦虑缓解指南</h4>
+                        <p class="text-sm text-gray-600 mt-1">学习如何应对日常焦虑和压力的实用技巧</p>
+                    </a>
+                    <a href="#" class="block p-3 border border-secondary rounded-lg hover:bg-neutral/50 transition-colors duration-300">
+                        <h4 class="font-medium text-primary">情绪管理课程</h4>
+                        <p class="text-sm text-gray-600 mt-1">为期7天的情绪管理训练计划</p>
+                    </a>
+                    <a href="#" class="block p-3 border border-secondary rounded-lg hover:bg-neutral/50 transition-colors duration-300">
+                        <h4 class="font-medium text-primary">放松冥想音乐</h4>
+                        <p class="text-sm text-gray-600 mt-1">帮助放松身心的冥想背景音乐合集</p>
+                    </a>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- 移动端底部导航 -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-lg py-2 px-4 border-t">
+        <div class="flex justify-around">
+            <a href="#" class="flex flex-col items-center text-primary">
+                <i class="fa fa-home text-xl"></i>
+                <span class="text-xs mt-1">首页</span>
+            </a>
+            <a href="#" class="flex flex-col items-center text-gray-500">
+                <i class="fa fa-book text-xl"></i>
+                <span class="text-xs mt-1">资源</span>
+            </a>
+            <a href="#" class="flex flex-col items-center text-gray-500">
+                <i class="fa fa-bar-chart text-xl"></i>
+                <span class="text-xs mt-1">情绪</span>
+            </a>
+            <a href="#" class="flex flex-col items-center text-gray-500">
+                <i class="fa fa-user text-xl"></i>
+                <span class="text-xs mt-1">我的</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white py-6 mt-auto md:mb-0 mb-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-lg font-bold mb-4">心灵守护</h3>
+                    <p class="text-sm text-gray-400">我们致力于提供专业、保密的心理健康支持，帮助你找到内心的平静与力量。</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">快速链接</h3>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-accent transition-colors duration-300">关于我们</a></li>
+                        <li><a href="#" class="hover:text-accent transition-colors duration-300">服务条款</a></li>
+                        <li><a href="#" class="hover:text-accent transition-colors duration-300">隐私政策</a></li>
+                        <li><a href="#" class="hover:text-accent transition-colors duration-300">联系我们</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">联系我们</h3>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li class="flex items-center"><i class="fa fa-envelope-o mr-2"></i> 请关注管大金同学的邮箱</li>
+                        <li class="flex items-center"><i class="fa fa-phone mr-2"></i>暂无服务热线</li>
+                        <li class="flex items-center"><i class="fa fa-map-marker mr-2"></i> 山东省滨州市邹平一中</li>
+                    </ul>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300"><i class="fa fa-weibo text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300"><i class="fa fa-wechat text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300"><i class="fa fa-qq text-xl"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-6 pt-6 text-center text-sm text-gray-500">
+                <p>© 2025 心灵守护. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 菜单切换
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // 聊天功能
+        document.getElementById('messageForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const userInput = document.getElementById('userInput');
+            const message = userInput.value.trim();
+            
+            if (message) {
+                // 添加用户消息
+                addMessage('user', message);
+                
+                // 清空输入框
+                userInput.value = '';
+                
+                // 显示"正在输入"指示器
+                document.getElementById('typingIndicator').classList.remove('hidden');
+                
+                // 模拟AI回复延迟
+                setTimeout(() => {
+                    // 隐藏"正在输入"指示器
+                    document.getElementById('typingIndicator').classList.add('hidden');
+                    
+                    // 根据用户输入生成AI回复
+                    const aiResponse = generateAIResponse(message);
+                    addMessage('ai', aiResponse);
+                }, 1500);
+            }
+        });
+
+        // 添加消息到聊天窗口
+        function addMessage(sender, message) {
+            const chatContainer = document.getElementById('chatContainer');
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            let messageHTML = '';
+            if (sender === 'user') {
+                messageHTML = `
+                    <div class="flex items-start justify-end mb-4">
+                        <div class="chat-bubble-user">
+                            <p>${message}</p>
+                            <div class="mt-3 text-xs text-white/80">${timeString}</div>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center ml-3 flex-shrink-0">
+                            <i class="fa fa-user text-primary"></i>
+                        </div>
+                    </div>
+                `;
+            } else {
+                messageHTML = `
+                    <div class="flex items-start mb-4">
+                        <div class="w-10 h-10 rounded-full bg-secondary flex items-center justify-center mr-3 flex-shrink-0">
+                            <i class="fa fa-robot text-primary"></i>
+                        </div>
+                        <div class="chat-bubble-ai">
+                            <p>${message}</p>
+                            <div class="mt-3 text-xs text-gray-500">${timeString}</div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            chatContainer.insertAdjacentHTML('beforeend', messageHTML);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // 生成AI回复（示例逻辑，实际应用中应连接到AI API）
+        function generateAIResponse(userMessage) {
+            // 简单的关键词匹配回复逻辑
+            if (userMessage.includes('焦虑') || userMessage.includes('紧张')) {
+                return `我理解焦虑的感觉可能很不舒服。焦虑通常源于对未来的不确定性或过度担忧。这里有一些建议可能帮助你缓解焦虑：<br><br>1. 尝试深呼吸练习：慢慢吸气4秒，保持4秒，然后慢慢呼气6秒。<br>2. 进行正念练习：专注于当下的感觉和环境，而不是担忧未来。<br>3. 设定具体的行动计划：将大问题分解为小步骤，逐一解决。<br><br>你是否愿意详细谈谈是什么让你感到焦虑？`;
+            } else if (userMessage.includes('抑郁') || userMessage.includes('沮丧')) {
+                return `感到抑郁或沮丧是很艰难的，我在这里支持你。抑郁情绪可能由多种因素引起，重要的是要记住你并不孤单。以下是一些建议：<br><br>1. 保持规律的生活作息，包括饮食和睡眠。<br>2. 尝试每天进行一些轻度运动，如散步或瑜伽。<br>3. 与亲朋好友保持联系，分享你的感受。<br><br>如果你觉得情绪持续低落，寻求专业心理咨询师的帮助是非常重要的。`;
+            } else if (userMessage.includes('压力') || userMessage.includes('累')) {
+                return `压力过大确实会影响我们的身心健康。当感到压力时，可以尝试以下方法：<br><br>1. 时间管理：合理安排任务，避免过度负荷。<br>2. 学会说"不"：不要害怕拒绝额外的责任。<br>3. 寻找放松方式：如阅读、听音乐、冥想或与宠物互动。<br><br>你最近是否有特别的压力源？我们可以一起探讨如何应对。`;
+            } else if (userMessage.includes('失眠') || userMessage.includes('睡不着')) {
+                return `睡眠问题确实会影响日常生活和情绪。以下是一些改善睡眠的建议：<br><br>1. 保持规律的睡眠时间，即使在周末也不要有太大差异。<br>2. 睡前1小时避免使用电子设备，蓝光会干扰睡眠。<br>3. 创建舒适的睡眠环境：保持房间凉爽、黑暗和安静。<br>4. 尝试放松技巧：如渐进性肌肉松弛或引导式冥想。<br><br>你是否有睡前思考过多的情况？`;
+            } else {
+                return `我能感受到你现在可能有些困扰。请放心，你所经历的情绪和感受都是真实且值得被理解的。能否详细描述你的感受？比如你感到这种情绪有多久了，是否有特定的触发因素，以及你已经尝试过哪些方法来应对？这些信息将帮助我更好地理解你的情况，并提供更有针对性的建议。`;
+            }
+        }
+    </script>
+</body>
+</html>
+    
